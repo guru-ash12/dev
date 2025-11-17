@@ -1,0 +1,22 @@
+!pip install pdfminer.six
+!pip install --upgrade nltk
+#cell 1
+from pdfminer.high_level import extract_text
+text=extract_text('1010.0040v1.pdf')
+# print(text)
+print(text)
+#cell 2
+from nltk import RegexpTokenizer
+tokenizer=RegexpTokenizer(r'/w+')
+tokens=tokenizer.tokenize(text)
+print(tokens)
+#cell 3
+from nltk.probability import FreqDist
+freq_dist=FreqDist(tokens)
+print(freq_dist)
+#cell 4
+long_freq_words=[word for word in tokens if len(word)>5 and freq_dist[word]>2]
+print(long_freq_words)
+#cell 5
+freq_dist.plot()
+#cell 6

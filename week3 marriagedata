@@ -1,0 +1,53 @@
+import pandas as pd
+import re
+
+# File paths
+labour_path = "xls-child_labour_database-July_2019.xls"
+marriage_path = "xls-child_marriage_database-may_2018.xls"
+
+# Read Excel files
+labour_df = pd.read_excel(labour_path)
+marriage_df = pd.read_excel(marriage_path)
+
+print("Child Labour Data Set:")
+display(labour_df.head())
+
+# -------------------------
+# Clean text function
+# -------------------------
+def clean_text(val):
+    if isinstance(val, str):
+        val = val.replace("\n", " ")
+        val = re.sub(r"[^a-zA-Z0-9\s]", "", val)
+        val = re.sub(r"\s+", " ", val)
+        return val.strip()
+    return val
+
+# -------------------------
+# Clean numeric column
+# -------------------------
+def clean_numeric_column(col):
+    return pd.to_numeric(col.astype(str).str.replace("[^0-9.-]", "", regex=True),
+                         errors="coerce")
+
+# -------------------------
+# Clean full DataFrame
+# -------------------------
+def clean_dataframe(df):
+    df_clean = df.drop_duplicates().copy()
+    df_clean.replace("missing", "", inplace=True)
+
+    for col in df_clean.select_dtypes(include=["object"]).columns:
+        df_clean[col] = df_clean[col].apply(clean_text)
+
+    return df_clean
+
+# Clean labour data
+labour_df_clean = clean_dataframe(labour_df)
+print("Cleaned Labour Data:")
+display(labour_df_clean.head())
+
+# Clean marriage data
+marriage_df_clean = clean_dataframe(marriage_df)
+print("Cleaned Marriage Data:")
+display(marriage_df_clean.head())

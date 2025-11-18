@@ -1,0 +1,46 @@
+corruption_df = "corruption-perception-index.xls"
+unicef_df = "unicef_oct_2014.xlsx"
+
+df = pd.read_excel("corruption-perception-index.xls")
+df2 = pd.read_excel("unicef_oct_2014.xlsx")
+
+corruption_cleaned = df.iloc[2:, [1, 7]]
+corruption_cleaned.columns = ['country', 'corruption_score']
+
+corruption_cleaned = corruption_cleaned.dropna().reset_index(drop=True)
+corruption_cleaned
+
+unicef_cleaned = df2.iloc[2:, [0, 1]]
+unicef_cleaned.columns = ['country', 'child_labour_percentage']
+
+unicef_cleaned = unicef_cleaned.dropna().reset_index(drop=True)
+unicef_cleaned
+
+merged_df = pd.merge(corruption_cleaned, unicef_cleaned, on='country')
+merged_df
+
+merged_df['corruption_score'] = pd.to_numeric(
+    merged_df['corruption_score'], errors='coerce'
+)
+
+merged_df['child_labour_percentage'] = pd.to_numeric(
+    merged_df['child_labour_percentage'], errors='coerce'
+)
+
+print(merged_df)
+
+merged_df = merged_df.dropna().reset_index(drop=True)
+print(merged_df)
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(
+    merged_df['corruption_score'],
+    merged_df['child_labour_percentage']
+)
+
+plt.xlabel('corruption_score')
+plt.ylabel('corruption_score vs child_labour_percentage')
+plt.title('corruption_score vs child_labour_percentage')
+
+plt.show()

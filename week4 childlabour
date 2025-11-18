@@ -1,3 +1,6 @@
+import pandas as pd
+import seaborn as sbn
+import matplotlib.pyplot as plt
 corruption_df = "corruption-perception-index.xls"
 unicef_df = "unicef_oct_2014.xlsx"
 
@@ -6,13 +9,11 @@ df2 = pd.read_excel("unicef_oct_2014.xlsx")
 
 corruption_cleaned = df.iloc[2:, [1, 7]]
 corruption_cleaned.columns = ['country', 'corruption_score']
-
 corruption_cleaned = corruption_cleaned.dropna().reset_index(drop=True)
 corruption_cleaned
 
 unicef_cleaned = df2.iloc[2:, [0, 1]]
 unicef_cleaned.columns = ['country', 'child_labour_percentage']
-
 unicef_cleaned = unicef_cleaned.dropna().reset_index(drop=True)
 unicef_cleaned
 

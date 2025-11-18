@@ -2,9 +2,6 @@ import pandas as pd
 import seaborn as sbn
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-# ----------------------------
-# Data
-# ----------------------------
 data = {
     "Name": ["Mahi", "Dhoni", "King", "Chiru", "Kohli"],
     "Age": [15, 20, 25, 30, 35],
@@ -12,39 +9,25 @@ data = {
     "Height": [165, 170, 180, 160, 175]
 }
 
-# Create DataFrame
 df = pd.DataFrame(data)
 print(df)
 
-# ----------------------------
-# Normalization (Min-Max)
-# ----------------------------
 min_max_scaler = MinMaxScaler()
 df["Normalized_Income"] = min_max_scaler.fit_transform(df[["Income"]])
-print("\nNormalized Income:")
 print(df["Normalized_Income"])
 
-# ----------------------------
-# Standardization (Z-Score)
-# ----------------------------
+
 standard_scaler = StandardScaler()
 df["Standard_Income"] = standard_scaler.fit_transform(df[["Income"]])
-print("\nStandardized Income:")
 print(df["Standard_Income"])
 
-# ----------------------------
-# Formatting Income as Currency
-# ----------------------------
 df["Format_Income"] = df["Income"].apply(lambda x: f"${x:,.2f}")
-print("\nFormatted Income:")
 print(df["Format_Income"])
 
 print("\nDataFrame After Formatting:")
 print(df)
 
-# ----------------------------
-# Outlier Detection
-# ----------------------------
+
 sbn.boxplot(df["Income"])
 
 q1 = df["Income"].quantile(0.25)
@@ -61,15 +44,13 @@ outliers = df.loc[(df["Income"] > upper_limit) | (df["Income"] < lower_limit)]
 print("\nDetected Outliers:")
 print(outliers)
 
-# ----------------------------
-# Capping Technique
-# ----------------------------
+
 new_df = df.copy()
 
-# Cap above upper limit
+
 new_df.loc[new_df["Income"] > upper_limit, "Income"] = upper_limit
 
-# Cap below lower limit
+
 new_df.loc[new_df["Income"] < lower_limit, "Income"] = lower_limit
 
 print("\nBoxplot After Capping:")
